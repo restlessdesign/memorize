@@ -10,15 +10,15 @@
 				<key>location-parameters</key>
 				<dict>
 					<key>EndingColumnNumber</key>
-					<string>13</string>
+					<string>0</string>
 					<key>EndingLineNumber</key>
-					<string>16</string>
+					<string>18</string>
 					<key>StartingColumnNumber</key>
-					<string>13</string>
+					<string>0</string>
 					<key>StartingLineNumber</key>
-					<string>16</string>
+					<string>17</string>
 					<key>Timestamp</key>
-					<string>733443424.997921</string>
+					<string>733443877.3136899</string>
 				</dict>
 				<key>rebasable-url</key>
 				<dict>
@@ -34,15 +34,16 @@
 			<key>text-context</key>
 			<dict>
 				<key>focused</key>
-				<string></string>
+				<string>}
+</string>
 				<key>leading</key>
-				<string>            ForEach(emojis.indices, id: \.self) { index in
-                CardView(content: emojis[index])
-            }</string>
+				<string>                ForEach(0..&lt;cardCount, id: \.self) { index in
+                    CardView(content: emojis[index])
+                </string>
 				<key>trailing</key>
-				<string>
-        }
-        .foregroundColor(.orange)
+				<string>            }
+            HStack {
+                Button("Add Card") {
 </string>
 			</dict>
 			<key>type</key>
