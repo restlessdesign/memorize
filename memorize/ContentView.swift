@@ -22,7 +22,7 @@ struct ContentView: View {
 }
 
 struct CardView: View {
-    var isFaceUp:Bool = false
+    var isFaceUp = false
     
     var body: some View {
         let base = RoundedRectangle(cornerRadius: /*@START_MENU_TOKEN@*/25.0/*@END_MENU_TOKEN@*/)
