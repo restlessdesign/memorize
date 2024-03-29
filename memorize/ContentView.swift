@@ -40,7 +40,7 @@ struct CardView: View {
         }
         .onTapGesture {
             print("tapped")
-            isFaceUp = !isFaceUp
+            isFaceUp.toggle()
         }
     }
 }
