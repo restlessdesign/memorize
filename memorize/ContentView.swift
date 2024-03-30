@@ -7,95 +7,125 @@
 
 import SwiftUI
 
+enum Theme: String, CaseIterable {
+    case food, animals, ancientTechnology
+    
+    func emojis() -> [String] {
+        switch self {
+        case .food:
+            ["🥐", "🧀", "🌭", "🥞", "🌮", "🥧"]
+        case .animals:
+            ["🐿️", "🦔", "🐇", "🦙", "🦥", "🦦"]
+        case .ancientTechnology:
+            ["💾", "💿", "📼", "☎️", "📟", "📻"]
+        }
+    }
+    
+    func color() -> Color {
+        switch self {
+        case .food:
+            Color.red
+        case .animals:
+            Color.purple
+        case .ancientTechnology:
+            Color.mint
+        }
+    }
+    
+    func icon() -> String {
+        switch self {
+        case .food:
+            "fork.knife.circle"
+        case .animals:
+            "pawprint.circle"
+        case .ancientTechnology:
+            "hourglass.circle"
+        }
+    }
+}
+
 struct ContentView: View {
-    let emojis = ["😈", "🍺", "🥳", "🦉", "🏃‍♂️‍➡️", "🌯", "🌭", "🎾", "🧲"]
-    @State var cardCount = 4
-    let maxCards = 8
+    
+    @State var currentTheme = Theme.animals
     
     var body: some View {
         VStack {
             gameTitle
-            Spacer()
+            Spacer(minLength: 40)
             ScrollView {
                 cardStack
             }
             Spacer()
             gameActions
         }
-        .foregroundColor(.orange)
-        .imageScale(.small)
-        .padding()
+        .imageScale(.large)
+        .padding(40)
     }
     
     var gameTitle: some View {
         Text("Memorize!")
             .font(.title)
-            .foregroundStyle(.white)
+            .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+            .textCase(/*@START_MENU_TOKEN@*/.uppercase/*@END_MENU_TOKEN@*/)
+            .foregroundStyle(Color.black)
     }
     
+    let cardColumns = [
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+    ]
+    
     var cardStack: some View {
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 80))]) {
-            ForEach(0..<cardCount, id: \.self) { index in
-                CardView(content: emojis[index])
-                    .aspectRatio(2/3, contentMode: .fit)
+        LazyVGrid(columns: cardColumns, spacing: 10) {
+            ForEach(currentTheme.emojis().indices, id: \.self) { index in
+                CardView(
+                    content: currentTheme.emojis()[index],
+                    color: currentTheme.color()
+                )
+                .aspectRatio(2/3, contentMode: .fit)
             }
         }
     }
+    
     var gameActions: some View {
-        VStack {
-            cardActions
-        }
-    }
-    
-    func cardCountAdjuster(by offset:Int, symbol: String) -> some View {
-        Button(action: {
-            cardCount += offset
-        }, label: {
-            Image(systemName: symbol)
-        })
-        .imageScale(.large)
-        .disabled(cardCount <= 1 || cardCount > maxCards)
-    }
-    
-    var cardRemover: some View {
-        cardCountAdjuster(by: -1, symbol: "minus.square.fill")
-    }
-    
-    var cardAdder: some View {
-        cardCountAdjuster(by: 1, symbol: "plus.square.fill")
-    }
-    
-    var cardActions: some View {
         HStack {
-            cardRemover
-            Spacer()
-            cardAdder
-        }
+            ForEach(Theme.allCases, id: \.self) { theme in
+                Button(action: {
+                    currentTheme = theme
+                    print("Set theme to \(currentTheme)")
+                }, label: {
+                    Image(systemName: theme.icon())
+                })
+                .foregroundColor(currentTheme == theme ? theme.color() : Color.gray)
+            }
+        }.font(.largeTitle)
     }
 }
 
-
 struct CardView: View {
     let content: String
+    let color: Color
+    
     @State var isFaceUp = false
     
     var body: some View {
-        let base = RoundedRectangle(cornerRadius: /*@START_MENU_TOKEN@*/25.0/*@END_MENU_TOKEN@*/)
+        let roundedRect = RoundedRectangle(cornerRadius: 25.0)
         ZStack {
-            base.fill(.white)
-            base.strokeBorder(lineWidth: 4.0)
+            roundedRect
+                .fill(isFaceUp ? .white : color)
+           
+            Text(content)
+                .font(.largeTitle)
+                .opacity(isFaceUp ? 1 : 0)
             
-            if isFaceUp {
-                Text(content)
-                    .font(.largeTitle)
-            }
-            else {
-                base
-            }
+            roundedRect
+                .strokeBorder(lineWidth: 4.0)
+                .foregroundColor(color)
         }
         .onTapGesture {
-            print("tapped")
             isFaceUp.toggle()
+            print((isFaceUp ? "Showing" : "Hiding") + " \(content)")
         }
     }
 }
