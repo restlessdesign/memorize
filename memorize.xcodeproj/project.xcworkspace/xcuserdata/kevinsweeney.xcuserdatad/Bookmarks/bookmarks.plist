@@ -18,7 +18,7 @@
 					<key>StartingLineNumber</key>
 					<string>17</string>
 					<key>Timestamp</key>
-					<string>733443877.3136899</string>
+					<string>733508671.359409</string>
 				</dict>
 				<key>rebasable-url</key>
 				<dict>
@@ -34,16 +34,16 @@
 			<key>text-context</key>
 			<dict>
 				<key>focused</key>
-				<string>}
+				<string>            cardStack
 </string>
 				<key>leading</key>
-				<string>                ForEach(0..&lt;cardCount, id: \.self) { index in
-                    CardView(content: emojis[index])
-                </string>
+				<string>        VStack {
+            gameTitle
+</string>
 				<key>trailing</key>
-				<string>            }
-            HStack {
-                Button("Add Card") {
+				<string>            gameActions
+        }
+        .foregroundColor(.orange)
 </string>
 			</dict>
 			<key>type</key>
