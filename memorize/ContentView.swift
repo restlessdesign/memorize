@@ -15,7 +15,11 @@ struct ContentView: View {
     var body: some View {
         VStack {
             gameTitle
-            cardStack
+            Spacer()
+            ScrollView {
+                cardStack
+            }
+            Spacer()
             gameActions
         }
         .foregroundColor(.orange)
@@ -30,9 +34,10 @@ struct ContentView: View {
     }
     
     var cardStack: some View {
-        HStack {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 80))]) {
             ForEach(0..<cardCount, id: \.self) { index in
                 CardView(content: emojis[index])
+                    .aspectRatio(2/3, contentMode: .fit)
             }
         }
     }

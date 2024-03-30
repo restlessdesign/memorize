@@ -12,13 +12,13 @@
 					<key>EndingColumnNumber</key>
 					<string>0</string>
 					<key>EndingLineNumber</key>
-					<string>18</string>
+					<string>20</string>
 					<key>StartingColumnNumber</key>
 					<string>0</string>
 					<key>StartingLineNumber</key>
-					<string>17</string>
+					<string>19</string>
 					<key>Timestamp</key>
-					<string>733508671.359409</string>
+					<string>733509532.492524</string>
 				</dict>
 				<key>rebasable-url</key>
 				<dict>
@@ -34,16 +34,17 @@
 			<key>text-context</key>
 			<dict>
 				<key>focused</key>
-				<string>            cardStack
+				<string>cardStack
+            }
 </string>
 				<key>leading</key>
-				<string>        VStack {
-            gameTitle
-</string>
+				<string>            Spacer()
+            ScrollView {
+                </string>
 				<key>trailing</key>
-				<string>            gameActions
+				<string>            Spacer()
+            gameActions
         }
-        .foregroundColor(.orange)
 </string>
 			</dict>
 			<key>type</key>
