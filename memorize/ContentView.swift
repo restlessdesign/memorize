@@ -45,7 +45,6 @@ enum Theme: String, CaseIterable {
 }
 
 struct ContentView: View {
-    
     @State var currentTheme = Theme.animals
     
     var body: some View {
@@ -67,7 +66,7 @@ struct ContentView: View {
             .font(.title)
             .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
             .textCase(/*@START_MENU_TOKEN@*/.uppercase/*@END_MENU_TOKEN@*/)
-            .foregroundStyle(Color.black)
+            .foregroundStyle(Color("TextColor"))
     }
     
     let cardColumns = [
