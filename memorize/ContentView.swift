@@ -7,11 +7,22 @@
 
 import SwiftUI
 
+// Because we are duplicating emojis in our grid, we need a to key off of them
+// within our ForEach without causing collisions. EmojiCard encapsulates the
+// String value of the emoji, while also exposing a UUID that is guaranteed
+// to be unique.
+struct EmojiCard {
+    let id = UUID()
+    let emoji:String
+}
+
 enum Theme: String, CaseIterable {
-    case food, animals, ancientTechnology
+    case food = "Food"
+    case animals = "Animals"
+    case ancientTechnology = "Ancient Tech"
     
-    func emojis() -> [String] {
-        switch self {
+    func cards() -> [EmojiCard] {
+        let emojiSet = switch self {
         case .food:
             ["🥐", "🧀", "🌭", "🥞", "🌮", "🥧"]
         case .animals:
@@ -19,6 +30,12 @@ enum Theme: String, CaseIterable {
         case .ancientTechnology:
             ["💾", "💿", "📼", "☎️", "📟", "📻"]
         }
+        
+        let output = (emojiSet + emojiSet)
+            .map({EmojiCard(emoji: $0)})
+            .shuffled()
+
+        return output
     }
     
     func color() -> Color {
@@ -45,12 +62,12 @@ enum Theme: String, CaseIterable {
 }
 
 struct ContentView: View {
-    @State var currentTheme = Theme.animals
+    @State var currentTheme = Theme.ancientTechnology
     
     var body: some View {
         VStack {
             gameTitle
-            Spacer(minLength: 40)
+            Spacer(minLength: 20)
             ScrollView {
                 cardStack
             }
@@ -77,12 +94,13 @@ struct ContentView: View {
     
     var cardStack: some View {
         LazyVGrid(columns: cardColumns, spacing: 10) {
-            ForEach(currentTheme.emojis().indices, id: \.self) { index in
+            ForEach(currentTheme.cards(), id: \.id) { emojiCard in
                 CardView(
-                    content: currentTheme.emojis()[index],
-                    color: currentTheme.color()
+                    content: emojiCard.emoji,
+                    color: currentTheme.color(),
+                    index: index
                 )
-                .aspectRatio(2/3, contentMode: .fit)
+                .aspectRatio(3/4, contentMode: .fit)
             }
         }
     }
@@ -94,17 +112,21 @@ struct ContentView: View {
                     currentTheme = theme
                     print("Set theme to \(currentTheme)")
                 }, label: {
-                    Image(systemName: theme.icon())
+                    VStack {
+                        Image(systemName: theme.icon())
+                        Text(theme.rawValue).dynamicTypeSize(.xSmall)
+                    }.frame(maxWidth: 90)
                 })
                 .foregroundColor(currentTheme == theme ? theme.color() : Color.gray)
             }
-        }.font(.largeTitle)
+        }
     }
 }
 
 struct CardView: View {
     let content: String
     let color: Color
+    let index: Any
     
     @State var isFaceUp = false
     
@@ -124,7 +146,7 @@ struct CardView: View {
         }
         .onTapGesture {
             isFaceUp.toggle()
-            print((isFaceUp ? "Showing" : "Hiding") + " \(content)")
+            print((isFaceUp ? "Showing" : "Hiding") + " \(content) :: \(index)")
         }
     }
 }
