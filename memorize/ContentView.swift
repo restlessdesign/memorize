@@ -66,16 +66,14 @@ struct ContentView: View {
     
     var body: some View {
         VStack {
+            Spacer()
             gameTitle
-            Spacer(minLength: 20)
-            ScrollView {
-                cardStack
-            }
+            cardStack
             Spacer()
             gameActions
         }
         .imageScale(.large)
-        .padding(40)
+        .padding(5)
     }
     
     var gameTitle: some View {
@@ -84,12 +82,11 @@ struct ContentView: View {
             .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
             .textCase(/*@START_MENU_TOKEN@*/.uppercase/*@END_MENU_TOKEN@*/)
             .foregroundStyle(Color("TextColor"))
+            .padding(EdgeInsets(top: 20, leading: 0, bottom: 10, trailing: 0))
     }
     
     let cardColumns = [
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible()),
+        GridItem(.adaptive(minimum: 90, maximum: 90))
     ]
     
     var cardStack: some View {
@@ -100,9 +97,10 @@ struct ContentView: View {
                     color: currentTheme.color(),
                     index: index
                 )
-                .aspectRatio(3/4, contentMode: .fit)
+                .aspectRatio(2/3, contentMode: .fit)
             }
         }
+        .frame(maxWidth:600)
     }
     
     var gameActions: some View {
@@ -131,7 +129,7 @@ struct CardView: View {
     @State var isFaceUp = false
     
     var body: some View {
-        let roundedRect = RoundedRectangle(cornerRadius: 25.0)
+        let roundedRect = RoundedRectangle(cornerRadius: 10.0)
         ZStack {
             roundedRect
                 .fill(isFaceUp ? .white : color)
