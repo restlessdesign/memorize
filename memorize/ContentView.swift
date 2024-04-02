@@ -62,6 +62,8 @@ enum Theme: String, CaseIterable {
 }
 
 struct ContentView: View {
+    var viewModel: EmojiMemoryGame
+    
     @State var currentTheme = Theme.ancientTechnology
     
     var body: some View {

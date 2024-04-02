@@ -8,9 +8,9 @@
 import Foundation
 
 struct MemorizeGame<CardContent> {
-    var cards: Array<Card>
+    private(set) var cards: Array<Card>
     
-    func chooseCard(card: Card) {
+    func choose(card: Card) {
         
     }
     
