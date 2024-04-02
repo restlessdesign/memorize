@@ -8,13 +8,25 @@
 import Foundation
 
 class EmojiMemoryGame {
-    private var model: MemorizeGame<String>
+    private static let emojis = ["🥐", "🧀", "🌭", "🥞", "🌮", "🥧"]
+    
+    private static func createMemoryGame() -> MemorizeGame<String> {
+        MemorizeGame(numberOfPairsOfCards: 4) { pairIndex in
+            if emojis.indices.contains(pairIndex) {
+                return emojis[pairIndex]
+            }
+            
+            return "⁉️"
+        }
+    }
+    
+    private var model = createMemoryGame()
     
     var cards: [MemorizeGame<String>.Card] {
         return model.cards
     }
     
-    func choose(card: MemorizeGame<String>.Card) {
+    func choose(_ card: MemorizeGame<String>.Card) {
         model.choose(card: card)
     }
 }
