@@ -21,7 +21,7 @@ struct MemoryGame<CardContent> {
         }
     }
     
-    func choose(card: Card) {
+    func choose(_ card: Card) {
         
     }
     
