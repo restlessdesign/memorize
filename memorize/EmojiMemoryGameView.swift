@@ -64,7 +64,7 @@ enum Theme: String, CaseIterable {
 struct EmojiMemoryGameView: View {
     // TODO
     // Refactor this to not initialize this way
-    var viewModel: EmojiMemoryGame = EmojiMemoryGame()
+    @ObservedObject var viewModel: EmojiMemoryGame
     
     @State var currentTheme = Theme.ancientTechnology
     
@@ -106,18 +106,24 @@ struct EmojiMemoryGameView: View {
     }
     
     var gameActions: some View {
-        HStack {
-            ForEach(Theme.allCases, id: \.self) { theme in
-                Button(action: {
-                    currentTheme = theme
-                    print("Set theme to \(currentTheme)")
-                }, label: {
-                    VStack {
-                        Image(systemName: theme.icon())
-                        Text(theme.rawValue).dynamicTypeSize(.xSmall)
-                    }.frame(maxWidth: 90)
-                })
-                .foregroundColor(currentTheme == theme ? theme.color() : Color.gray)
+        VStack {
+            Button("Shuffle") {
+                viewModel.shuffle()
+            }
+            
+            HStack {
+                ForEach(Theme.allCases, id: \.self) { theme in
+                    Button(action: {
+                        currentTheme = theme
+                        print("Set theme to \(currentTheme)")
+                    }, label: {
+                        VStack {
+                            Image(systemName: theme.icon())
+                            Text(theme.rawValue).dynamicTypeSize(.xSmall)
+                        }.frame(maxWidth: 90)
+                    })
+                    .foregroundColor(currentTheme == theme ? theme.color() : Color.gray)
+                }
             }
         }
     }
@@ -150,5 +156,5 @@ struct CardView: View {
 }
 
 #Preview {
-    EmojiMemoryGameView()
+    EmojiMemoryGameView(viewModel: EmojiMemoryGame())
 }
