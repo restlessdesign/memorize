@@ -14,10 +14,10 @@ struct MemoryGame<CardContent> {
         cards = []
         
         for pairIndex in 0..<max(2, numberOfPairsOfCards) {
-            let currentCard = Card(content: cardContentFactory(pairIndex))
+            let content = cardContentFactory(pairIndex)
             
-            cards.append(currentCard)
-            cards.append(currentCard)
+            cards.append(Card(content: content))
+            cards.append(Card(content: content))
         }
     }
     
