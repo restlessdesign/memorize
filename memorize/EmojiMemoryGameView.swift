@@ -62,7 +62,9 @@ enum Theme: String, CaseIterable {
 }
 
 struct EmojiMemoryGameView: View {
-    var viewModel: EmojiMemoryGame
+    // TODO
+    // Refactor this to not initialize this way
+    var viewModel: EmojiMemoryGame = EmojiMemoryGame()
     
     @State var currentTheme = Theme.ancientTechnology
     
@@ -126,29 +128,21 @@ struct EmojiMemoryGameView: View {
 }
 
 struct CardView: View {
-    let content: String
-    let color: Color
-    let index: Any
-    
-    @State var isFaceUp = false
+    let card:MemorizeGame<String>.Card
     
     var body: some View {
-        let roundedRect = RoundedRectangle(cornerRadius: 10.0)
         ZStack {
-            roundedRect
-                .fill(isFaceUp ? .white : color)
-           
-            Text(content)
-                .font(.largeTitle)
-                .opacity(isFaceUp ? 1 : 0)
+            let base = RoundedRectangle(cornerRadius: 10.0)
             
-            roundedRect
-                .strokeBorder(lineWidth: 4.0)
-                .foregroundColor(color)
-        }
-        .onTapGesture {
-            isFaceUp.toggle()
-            print((isFaceUp ? "Showing" : "Hiding") + " \(content) :: \(index)")
+            Group {
+                base.fill(.white)
+                base.strokeBorder(lineWidth: 4.0)
+                Text(card.content)
+                    .font(.largeTitle)
+            }.opacity(card.isFaceUp ? 1 : 0)
+            
+            base.fill()
+                .opacity(card.isFaceUp ? 0 : 1)
         }
     }
 }
