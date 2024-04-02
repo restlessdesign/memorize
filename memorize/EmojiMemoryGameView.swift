@@ -97,13 +97,9 @@ struct EmojiMemoryGameView: View {
     
     var cardStack: some View {
         LazyVGrid(columns: cardColumns, spacing: 10) {
-            ForEach(currentTheme.cards(), id: \.id) { emojiCard in
-                CardView(
-                    content: emojiCard.emoji,
-                    color: currentTheme.color(),
-                    index: index
-                )
-                .aspectRatio(2/3, contentMode: .fit)
+            ForEach(viewModel.cards.indices, id: \.self) { index in
+                CardView(card: viewModel.cards[index])
+                    .aspectRatio(2/3, contentMode: .fit)
             }
         }
         .frame(maxWidth:600)
