@@ -86,6 +86,8 @@ struct ContentView: View {
     }
     
     let cardColumns = [
+        // TODO
+        // Calculate min and max vals based on the number of cards displayed
         GridItem(.adaptive(minimum: 90, maximum: 90))
     ]
     
