@@ -128,7 +128,7 @@ struct EmojiMemoryGameView: View {
 }
 
 struct CardView: View {
-    let card:MemorizeGame<String>.Card
+    let card:MemoryGame<String>.Card
     
     var body: some View {
         ZStack {

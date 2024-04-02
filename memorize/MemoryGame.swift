@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct MemorizeGame<CardContent> {
+struct MemoryGame<CardContent> {
     private(set) var cards: [Card]
     
     init(numberOfPairsOfCards: Int, cardContentFactory: (Int) -> CardContent) {

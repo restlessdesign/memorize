@@ -10,8 +10,8 @@ import Foundation
 class EmojiMemoryGame {
     private static let emojis = ["🥐", "🧀", "🌭", "🥞", "🌮", "🥧"]
     
-    private static func createMemoryGame() -> MemorizeGame<String> {
-        MemorizeGame(numberOfPairsOfCards: 4) { pairIndex in
+    private static func createMemoryGame() -> MemoryGame<String> {
+        MemoryGame(numberOfPairsOfCards: 4) { pairIndex in
             if emojis.indices.contains(pairIndex) {
                 return emojis[pairIndex]
             }
@@ -22,11 +22,11 @@ class EmojiMemoryGame {
     
     private var model = createMemoryGame()
     
-    var cards: [MemorizeGame<String>.Card] {
+    var cards: [MemoryGame<String>.Card] {
         return model.cards
     }
     
-    func choose(_ card: MemorizeGame<String>.Card) {
+    func choose(_ card: MemoryGame<String>.Card) {
         model.choose(card: card)
     }
 }
