@@ -98,7 +98,7 @@ struct EmojiMemoryGameView: View {
     var cardStack: some View {
         LazyVGrid(columns: cardColumns, spacing: 10) {
             ForEach(viewModel.cards.indices, id: \.self) { index in
-                CardView(card: viewModel.cards[index])
+                CardView(viewModel.cards[index])
                     .aspectRatio(2/3, contentMode: .fit)
             }
         }
@@ -125,6 +125,10 @@ struct EmojiMemoryGameView: View {
 
 struct CardView: View {
     let card:MemoryGame<String>.Card
+    
+    init(_ card: MemoryGame<String>.Card) {
+        self.card = card
+    }
     
     var body: some View {
         ZStack {
