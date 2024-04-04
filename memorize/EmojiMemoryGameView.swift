@@ -72,7 +72,7 @@ struct EmojiMemoryGameView: View {
         VStack {
             Spacer()
             gameTitle
-            cardStack
+            cardStack.animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/, value: viewModel.cards)
             Spacer()
             gameActions
         }
