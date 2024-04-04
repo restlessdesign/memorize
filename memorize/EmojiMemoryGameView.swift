@@ -97,8 +97,8 @@ struct EmojiMemoryGameView: View {
     
     var cardStack: some View {
         LazyVGrid(columns: cardColumns, spacing: 0) {
-            ForEach(viewModel.cards.indices, id: \.self) { index in
-                CardView(viewModel.cards[index])
+            ForEach(viewModel.cards) { card in
+                CardView(card)
                     .aspectRatio(2/3, contentMode: .fit)
                     .padding(4)
             }
