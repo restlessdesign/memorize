@@ -21,8 +21,23 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
         }
     }
     
-    func choose(_ card: Card) {
+    mutating func choose(_ card: Card) {
+        let chosenIndex = index(of: card)
         
+        // card is a value type here, so we can’t toggle() its .isFaceUp property!
+        // We must instead go to our cards property…
+        cards[chosenIndex].isFaceUp.toggle()
+    }
+    
+    func index(of card:Card) -> Int {
+        for index in cards.indices {
+            if cards[index].id == card.id {
+                return index
+            }
+        }
+        
+        // FIXME: Should probably throw here…
+        return -1
     }
     
     mutating func shuffle() {
@@ -31,11 +46,11 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
     
     struct Card: Equatable, Identifiable, CustomDebugStringConvertible {
         var debugDescription: String {
-            return "\(id): \(content)"
+            return "\(id) (\(content))"
         }
         
         let content: CardContent
-        var isFaceUp = true
+        var isFaceUp = false
         var isMatched = false
         
         let id: String
