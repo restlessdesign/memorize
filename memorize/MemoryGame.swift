@@ -29,11 +29,9 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
         cards.shuffle()
     }
     
-    struct Card: Equatable, Identifiable {
-        static func == (lhs: MemoryGame<CardContent>.Card, rhs: MemoryGame<CardContent>.Card) -> Bool {
-            return lhs.content == rhs.content &&
-            lhs.isFaceUp == rhs.isFaceUp &&
-            lhs.isMatched == rhs.isMatched
+    struct Card: Equatable, Identifiable, CustomDebugStringConvertible {
+        var debugDescription: String {
+            return "\(id): \(content)"
         }
         
         let content: CardContent
