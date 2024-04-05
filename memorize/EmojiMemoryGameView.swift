@@ -1,20 +1,18 @@
-//
-//  ContentView.swift
-//  memorize
-//
-//  Created by Kevin Sweeney on 3/22/24.
-//
-
 import SwiftUI
 
+/// The rendered view for the Emoji memory game
 struct EmojiMemoryGameView: View {
-    // TODO
-    // Refactor this to not initialize this way
+    // TODO: Refactor this to not initialize this way
+    /// The game’s ViewModel, which serves as an intermediary between our model and our view
     @ObservedObject var viewModel: EmojiMemoryGame
     
+    /// Returns a `VStack` that divides our view into three sections:
+    /// 1. A title area that also displays the player’s current score
+    /// 2. The main gameplay area where cards are displayed and interacted with
+    /// 3. A footer area for various actions that can be taken during the game
     var body: some View {
         VStack(spacing: 0) {
-            gameTitle
+            gameHeader
             Spacer()
             gamePlayArea
             Spacer()
@@ -22,7 +20,8 @@ struct EmojiMemoryGameView: View {
         }
     }
     
-    var gameTitle: some View {
+    /// Renders the name of the current game as well as the player’s current score
+    var gameHeader: some View {
         VStack(spacing: 4) {
             Text("Memorize")
                 .font(.title)
@@ -38,14 +37,8 @@ struct EmojiMemoryGameView: View {
         }
     }
     
+    /// Renders a grid of cards
     var gamePlayArea: some View {
-        Group {
-            cardGrid.animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/, value: viewModel.cards)
-        }.padding(10)
-    }
-    
-    var cardGrid: some View {
-        // TODO: Calculate based off the number of cards rendered
         let cardColumns = [GridItem(.adaptive(minimum: 85), spacing: 0)]
         
         return LazyVGrid(columns: cardColumns, spacing: 0) {
@@ -58,8 +51,11 @@ struct EmojiMemoryGameView: View {
                     }
             }
         }
+        .padding(10)
+        .animation(.easeIn, value: viewModel.cards)
     }
     
+    /// Renders a series of actions that can be performed by the player during the game
     var gameActions: some View {
         HStack {
             Button("New Game") {
@@ -69,10 +65,12 @@ struct EmojiMemoryGameView: View {
             Button("Shuffle") {
                 viewModel.shuffle()
             }.buttonStyle(.bordered)
-        }.font(.title2)
+        }
+        .font(.title2)
     }
 }
 
+/// Renders a card using data supplied from the model
 struct CardView: View {
     let card:MemoryGame<String>.Card
     
@@ -92,7 +90,8 @@ struct CardView: View {
                     .font(.system(size: 200))
                     .minimumScaleFactor(0.01)
                     .aspectRatio(1, contentMode: .fit)
-            }.opacity(card.isFaceUp ? 1 : 0)
+            }
+            .opacity(card.isFaceUp ? 1 : 0)
             
             base
                 .fill()
