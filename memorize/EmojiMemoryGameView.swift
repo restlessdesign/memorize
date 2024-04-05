@@ -7,15 +7,6 @@
 
 import SwiftUI
 
-// Because we are duplicating emojis in our grid, we need a to key off of them
-// within our ForEach without causing collisions. EmojiCard encapsulates the
-// String value of the emoji, while also exposing a UUID that is guaranteed
-// to be unique.
-struct EmojiCard {
-    let id = UUID()
-    let emoji:String
-}
-
 enum Theme: String, CaseIterable {
     case food = "Food"
     case animals = "Animals"
