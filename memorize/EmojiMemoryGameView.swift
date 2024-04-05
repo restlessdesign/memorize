@@ -13,34 +13,42 @@ struct EmojiMemoryGameView: View {
     @ObservedObject var viewModel: EmojiMemoryGame
     
     var body: some View {
-        VStack {
-            Spacer()
+        VStack(spacing: 0) {
             gameTitle
-            cardStack.animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/, value: viewModel.cards)
+            Spacer()
+            gamePlayArea
             Spacer()
             gameActions
         }
-        .imageScale(.large)
-        .padding(5)
     }
     
     var gameTitle: some View {
-        Text("Memorize!")
-            .font(.title)
-            .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
-            .textCase(/*@START_MENU_TOKEN@*/.uppercase/*@END_MENU_TOKEN@*/)
-            .foregroundStyle(Color("TextColor"))
-            .padding(EdgeInsets(top: 20, leading: 0, bottom: 10, trailing: 0))
+        VStack(spacing: 4) {
+            Text("Memorize")
+                .font(.title)
+                .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                .foregroundStyle(Color("TextColor"))
+            
+            Text("Score: 0")
+                .font(.caption)
+            
+            Rectangle()
+                .frame(width: .infinity, height: 1)
+                .foregroundColor(.gray)
+        }
     }
     
-    let cardColumns = [
-        // TODO
-        // Calculate min and max vals based on the number of cards displayed
-        GridItem(.adaptive(minimum: 85), spacing: 0),
-    ]
+    var gamePlayArea: some View {
+        Group {
+            cardGrid.animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/, value: viewModel.cards)
+        }.padding(10)
+    }
     
-    var cardStack: some View {
-        LazyVGrid(columns: cardColumns, spacing: 0) {
+    var cardGrid: some View {
+        // TODO: Calculate based off the number of cards rendered
+        let cardColumns = [GridItem(.adaptive(minimum: 85), spacing: 0)]
+        
+        return LazyVGrid(columns: cardColumns, spacing: 0) {
             ForEach(viewModel.cards) { card in
                 CardView(card)
                     .aspectRatio(2/3, contentMode: .fit)
@@ -53,11 +61,15 @@ struct EmojiMemoryGameView: View {
     }
     
     var gameActions: some View {
-        VStack {
+        HStack {
+            Button("New Game") {
+                // TODO: Create a new game
+            }.buttonStyle(.borderedProminent)
+            
             Button("Shuffle") {
                 viewModel.shuffle()
-            }
-        }
+            }.buttonStyle(.bordered)
+        }.font(.title2)
     }
 }
 
@@ -75,13 +87,15 @@ struct CardView: View {
             Group {
                 base.fill(.white)
                 base.strokeBorder(lineWidth: 4.0)
+                
                 Text(card.content)
                     .font(.system(size: 200))
                     .minimumScaleFactor(0.01)
                     .aspectRatio(1, contentMode: .fit)
             }.opacity(card.isFaceUp ? 1 : 0)
             
-            base.fill()
+            base
+                .fill()
                 .opacity(card.isFaceUp ? 0 : 1)
         }
         .opacity(card.isFaceUp || !card.isMatched ? 1 : 0)
