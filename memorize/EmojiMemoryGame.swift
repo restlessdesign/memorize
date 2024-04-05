@@ -34,13 +34,19 @@ class EmojiMemoryGame: ObservableObject {
         }
     }
     
-    /// The set of emojis that will be used to construct cards
-    private static let emojis = ["🥐", "🧀", "🌭", "🥞", "🌮", "🥧"]
+    /// Picks a random theme and returns the associated card content for that them
+    /// - Returns: The set of emojis that will be used to construct cards
+    private static func selectCardEmojisFromRandomTheme() -> [String] {
+        let theme = Theme.allCases.randomElement()
+        return theme!.cards()
+    }
     
     /// Constructs the model to be used for this version of the game, using `emojis` as the source for card content
     /// - Returns: An instance of a String-based memory game model
     private static func createMemoryGame() -> MemoryGame<String> {
-        MemoryGame(numberOfPairsOfCards: 4) { pairIndex in
+        let emojis = selectCardEmojisFromRandomTheme()
+        
+        return MemoryGame(numberOfPairsOfCards: 4) { pairIndex in
             if emojis.indices.contains(pairIndex) {
                 return emojis[pairIndex]
             }
@@ -68,5 +74,9 @@ class EmojiMemoryGame: ObservableObject {
     /// Shuffles the cards
     func shuffle() {
         model.shuffle()
+    }
+    
+    func newGame() {
+        model = EmojiMemoryGame.createMemoryGame()
     }
 }
