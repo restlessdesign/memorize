@@ -59,12 +59,9 @@ struct EmojiMemoryGameView: View {
     var gameActions: some View {
         HStack {
             Button("New Game") {
-                // TODO: Create a new game
-            }.buttonStyle(.borderedProminent)
-            
-            Button("Shuffle") {
+                viewModel.newGame()
                 viewModel.shuffle()
-            }.buttonStyle(.bordered)
+            }.buttonStyle(.borderedProminent)
         }
         .font(.title2)
     }
