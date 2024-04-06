@@ -4,49 +4,41 @@ import SwiftUI
 /// ViewModel of an emoji-specifc version of the memory game
 class EmojiMemoryGame: ObservableObject {
     
-    enum Theme: String, CaseIterable {
-        case food = "Food"
-        case animals = "Animals"
-        case ancientTechnology = "Ancient Tech"
+    /// Holds all of the properties necessary to construct a new emoji matching game theme
+    struct MemoryGameTheme {
+        /// The name of this theme
+        var name: String
+        /// A theme-based color to “paint” the back of the cards
+        var color: Color
+        /// An array of emoji to use as the content for this theme’s cards
+        var deck: [String]
+        /// How many pairs will be displayed and need to be matched by the player
+        var pairsToMatch: Int
         
-        func cards() -> [String] {
-            switch self {
-            case .food: ["🥐", "🧀", "🌭", "🥞", "🌮", "🥧"]
-            case .animals: ["🐿️", "🦔", "🐇", "🦙", "🦥", "🦦"]
-            case .ancientTechnology: ["💾", "💿", "📼", "☎️", "📟", "📻"]
-            }
-        }
-        
-        func color() -> Color {
-            switch self {
-            case .food: Color.red
-            case .animals: Color.purple
-            case .ancientTechnology: Color.mint
-            }
-        }
-        
-        func icon() -> String {
-            switch self {
-            case .food: "fork.knife.circle"
-            case .animals: "pawprint.circle"
-            case .ancientTechnology: "hourglass.circle"
-            }
+        /// Selects the appropriate number of card values to use based on the themes `pairsToMatch` value
+        /// - Returns: An array of emojis that will be used to construct our cards
+        func pickCards() -> [String] {
+            Array(deck.shuffled().prefix(upTo: pairsToMatch))
         }
     }
     
     /// Picks a random theme and returns the associated card content for that them
     /// - Returns: The set of emojis that will be used to construct cards
-    private static func selectCardEmojisFromRandomTheme() -> [String] {
-        let theme = Theme.allCases.randomElement()
-        return theme!.cards()
+    private static func getRandomTheme() -> MemoryGameTheme? {
+        [
+            MemoryGameTheme(name: "Ancient Technology", color: .teal, deck: ["💾", "💿", "📼", "☎️", "📟", "📻"], pairsToMatch: 6),
+            MemoryGameTheme(name: "Animals", color: .green, deck: ["🐿️", "🦔", "🐇", "🦙", "🦥", "🦦"], pairsToMatch: 4),
+            MemoryGameTheme(name: "Food", color: .red, deck: ["🥐", "🧀", "🌭", "🥞", "🌮", "🥧", "🍗", "🥟"], pairsToMatch: 8),
+        ].randomElement()
     }
     
     /// Constructs the model to be used for this version of the game, using `emojis` as the source for card content
     /// - Returns: An instance of a String-based memory game model
     private static func createMemoryGame() -> MemoryGame<String> {
-        let emojis = selectCardEmojisFromRandomTheme()
+        let theme = getRandomTheme()!
+        let emojis = theme.pickCards()
         
-        return MemoryGame(numberOfPairsOfCards: 4) { pairIndex in
+        return MemoryGame(numberOfPairsOfCards: theme.pairsToMatch) { pairIndex in
             if emojis.indices.contains(pairIndex) {
                 return emojis[pairIndex]
             }
