@@ -71,6 +71,10 @@ class EmojiMemoryGame: ObservableObject {
         return model.theme
     }
     
+    var score: Int {
+        return model.game.score
+    }
+    
     // MARK: - Intents
     
     /// Picks a specific card

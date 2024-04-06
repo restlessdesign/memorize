@@ -6,6 +6,9 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
     /// The set of all (unpaired) cards that a player can choose
     private(set) var cards: [Card]
     
+    // TODO: This should probably have some tighter access controls…
+    /// The score of the current game
+    var score: Int = 0
     
     /// Initializes the MemoryGame model
     /// - Parameters:
@@ -13,6 +16,7 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
     ///   - cardContentFactory: A factory which determines the content that will be printed on a given card
     init(numberOfPairsOfCards: Int, cardContentFactory: (Int) -> CardContent) {
         cards = []
+        score = 0
         
         for pairIndex in 0..<max(2, numberOfPairsOfCards) {
             let content = cardContentFactory(pairIndex)
@@ -41,6 +45,11 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
                     if cards[chosenIndex].content == cards[potentialMatchIndex].content {
                         cards[chosenIndex].isMatched = true
                         cards[potentialMatchIndex].isMatched = true
+                        
+                        score += 2
+                    }
+                    else {
+                        score -= 1
                     }
                 }
                 else {

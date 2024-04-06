@@ -50,7 +50,7 @@ struct EmojiMemoryGameView: View {
                     trailing: 0
                 ))
             
-            Text("Score: 0")
+            Text("Score: \(viewModel.score)")
                 .font(.headline)
                 .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
             
