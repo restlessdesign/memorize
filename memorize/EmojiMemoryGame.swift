@@ -34,8 +34,7 @@ class EmojiMemoryGame: ObservableObject {
     
     /// Constructs the model to be used for this version of the game, using `emojis` as the source for card content
     /// - Returns: An instance of a String-based memory game model
-    private static func createMemoryGame() -> MemoryGame<String> {
-        let theme = getRandomTheme()!
+    private static func createMemoryGame(fromTheme theme: MemoryGameTheme) -> MemoryGame<String> {
         let emojis = theme.pickCards()
         
         return MemoryGame(numberOfPairsOfCards: theme.pairsToMatch) { pairIndex in
@@ -47,12 +46,29 @@ class EmojiMemoryGame: ObservableObject {
         }
     }
     
+    struct Model {
+        var game: MemoryGame<String>
+        let theme: MemoryGameTheme
+    }
+    
     /// Exposes the model for the purposes of being observed, so that our view has something to react to
-    @Published private var model = createMemoryGame()
+    @Published private var model = createNewGame()
+    
+    private static func createNewGame() -> Model {
+        let randomTheme = getRandomTheme()!
+        return Model(
+            game: createMemoryGame(fromTheme: randomTheme),
+            theme: randomTheme
+        )
+    }
     
     /// Exposes the cards that have been constructed by our model for use in our view
     var cards: [MemoryGame<String>.Card] {
-        return model.cards
+        return model.game.cards
+    }
+    
+    var theme: MemoryGameTheme {
+        return model.theme
     }
     
     // MARK: - Intents
@@ -60,15 +76,15 @@ class EmojiMemoryGame: ObservableObject {
     /// Picks a specific card
     /// - Parameter card: A user-selected card
     func choose(_ card: MemoryGame<String>.Card) {
-        model.choose(card)
+        model.game.choose(card)
     }
     
     /// Shuffles the cards
     func shuffle() {
-        model.shuffle()
+        model.game.shuffle()
     }
     
     func newGame() {
-        model = EmojiMemoryGame.createMemoryGame()
+        model = EmojiMemoryGame.createNewGame()
     }
 }

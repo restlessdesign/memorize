@@ -11,29 +11,49 @@ struct EmojiMemoryGameView: View {
     /// 2. The main gameplay area where cards are displayed and interacted with
     /// 3. A footer area for various actions that can be taken during the game
     var body: some View {
-        VStack(spacing: 0) {
-            gameHeader
-            Spacer()
-            gamePlayArea
-            Spacer()
-            gameActions
+        ZStack {
+            Text("\(viewModel.theme.deck[0])")
+                .font(.system(size: 300))
+                .opacity(0.4)
+            
+            VStack(spacing: 0) {
+                gameHeader
+                Spacer()
+                gamePlayArea
+                Spacer()
+                gameActions
+            }
         }
     }
     
     /// Renders the name of the current game as well as the player’s current score
     var gameHeader: some View {
-        VStack(spacing: 4) {
-            Text("Memorize")
-                .font(.title)
+        VStack(spacing: 0) {
+            Text("Memorize!")
+                .font(.title3)
                 .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
                 .foregroundStyle(Color("TextColor"))
             
-            Text("Score: 0")
-                .font(.caption)
+            Text("\(viewModel.theme.name)")
+                .font(.title)
+                .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                .foregroundStyle(viewModel.theme.color)
             
             Rectangle()
                 .frame(width: .infinity, height: 1)
-                .foregroundColor(.gray)
+                .foregroundColor(Color("TextColor"))
+                .opacity(0.2)
+                .padding(EdgeInsets(
+                    top: 10,
+                    leading: 0,
+                    bottom: 10,
+                    trailing: 0
+                ))
+            
+            Text("Score: 0")
+                .font(.headline)
+                .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+            
         }
     }
     
@@ -43,7 +63,7 @@ struct EmojiMemoryGameView: View {
         
         return LazyVGrid(columns: cardColumns, spacing: 0) {
             ForEach(viewModel.cards) { card in
-                CardView(card)
+                CardView(card, withThemeColor: viewModel.theme.color)
                     .aspectRatio(2/3, contentMode: .fit)
                     .padding(4)
                     .onTapGesture {
@@ -61,7 +81,9 @@ struct EmojiMemoryGameView: View {
             Button("New Game") {
                 viewModel.newGame()
                 viewModel.shuffle()
-            }.buttonStyle(.borderedProminent)
+            }
+            .buttonStyle(.borderedProminent)
+            .tint(viewModel.theme.color)
         }
         .font(.title2)
     }
@@ -69,10 +91,12 @@ struct EmojiMemoryGameView: View {
 
 /// Renders a card using data supplied from the model
 struct CardView: View {
-    let card:MemoryGame<String>.Card
+    let card: MemoryGame<String>.Card
+    let fillColor: Color
     
-    init(_ card: MemoryGame<String>.Card) {
+    init(_ card: MemoryGame<String>.Card, withThemeColor themeColor: Color) {
         self.card = card
+        self.fillColor = themeColor
     }
     
     var body: some View {
@@ -91,7 +115,7 @@ struct CardView: View {
             .opacity(card.isFaceUp ? 1 : 0)
             
             base
-                .fill()
+                .fill(fillColor)
                 .opacity(card.isFaceUp ? 0 : 1)
         }
         .opacity(card.isFaceUp || !card.isMatched ? 1 : 0)
