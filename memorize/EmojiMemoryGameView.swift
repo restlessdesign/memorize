@@ -31,7 +31,7 @@ struct EmojiMemoryGameView: View {
     
     /// Renders the name of the current game as well as the player’s current score
     @ViewBuilder
-    var gameHeader: some View {
+    private var gameHeader: some View {
         let title = Text("Memorize!")
             .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
             .foregroundStyle(Color("TextColor"))
@@ -85,7 +85,7 @@ struct EmojiMemoryGameView: View {
     }
     
     /// Renders a grid of cards
-    var gamePlayArea: some View {
+    private var gamePlayArea: some View {
         GeometryReader { geo in
             let gridItemSize = gridItemWidthThatFits(
                 count: viewModel.cards.count,
@@ -116,7 +116,7 @@ struct EmojiMemoryGameView: View {
     ///   - size: The size offered to us
     ///   - aspectRatio: The aspect ratio of the card
     /// - Returns: The ideal width of our card
-    func gridItemWidthThatFits(
+    private func gridItemWidthThatFits(
         count: Int,
         size: CGSize, 
         atAspectRatio aspectRatio: CGFloat
@@ -140,7 +140,7 @@ struct EmojiMemoryGameView: View {
     }
     
     /// Renders a series of actions that can be performed by the player during the game
-    var gameActions: some View {
+    private var gameActions: some View {
         HStack {
             Button("New Game") {
                 viewModel.newGame()
