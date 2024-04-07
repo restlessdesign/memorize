@@ -6,6 +6,9 @@ struct EmojiMemoryGameView: View {
     /// The game’s ViewModel, which serves as an intermediary between our model and our view
     @ObservedObject var viewModel: EmojiMemoryGame
     
+    /// The aspect ratio of our cards
+    private let cardAspectRatio:CGFloat = 2/3
+    
     /// Returns a `VStack` that divides our view into three sections:
     /// 1. A title area that also displays the player’s current score
     /// 2. The main gameplay area where cards are displayed and interacted with
@@ -27,6 +30,7 @@ struct EmojiMemoryGameView: View {
     }
     
     /// Renders the name of the current game as well as the player’s current score
+    @ViewBuilder
     var gameHeader: some View {
         let title = Text("Memorize!")
             .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
@@ -54,7 +58,7 @@ struct EmojiMemoryGameView: View {
                     .opacity(0.2)
             )
         
-        return ViewThatFits {
+        ViewThatFits {
             VStack(spacing: 0) {
                 title.font(.title3)
                 theme.font(.title)
@@ -62,7 +66,7 @@ struct EmojiMemoryGameView: View {
                 score
             }
             
-            HStack(spacing: 0) {
+            HStack(alignment: .top, spacing: 0) {
                 HStack(spacing: 0) {
                     title.font(.title3)
                     Text(" • ")
@@ -72,9 +76,9 @@ struct EmojiMemoryGameView: View {
                 score
             }
             .padding(EdgeInsets(
-                top: 30,
+                top: 10,
                 leading: 0,
-                bottom: -5,
+                bottom: 0,
                 trailing: 0
             ))
         }
@@ -82,20 +86,57 @@ struct EmojiMemoryGameView: View {
     
     /// Renders a grid of cards
     var gamePlayArea: some View {
-        let cardColumns = [GridItem(.adaptive(minimum: 85), spacing: 0)]
-        
-        return LazyVGrid(columns: cardColumns, spacing: 0) {
-            ForEach(viewModel.cards) { card in
-                CardView(card, withThemeColor: viewModel.theme.color)
-                    .aspectRatio(2/3, contentMode: .fit)
-                    .padding(4)
-                    .onTapGesture {
-                        viewModel.choose(card)
-                    }
+        GeometryReader { geo in
+            let gridItemSize = gridItemWidthThatFits(
+                count: viewModel.cards.count,
+                size: geo.size,
+                atAspectRatio: cardAspectRatio
+            )
+            
+            LazyVGrid(
+                columns: [GridItem(.adaptive(minimum: gridItemSize), spacing: 0)],
+                spacing: 0
+            ) {
+                ForEach(viewModel.cards) { card in
+                    CardView(card, withThemeColor: viewModel.theme.color)
+                        .aspectRatio(cardAspectRatio, contentMode: .fit)
+                        .padding(4)
+                        .onTapGesture {
+                            viewModel.choose(card)
+                        }
+                }
             }
+            .animation(.easeIn, value: viewModel.cards)
         }
-        .padding(10)
-        .animation(.easeIn, value: viewModel.cards)
+    }
+    
+    /// Determines the optimal size of our cards to fit within the view
+    /// - Parameters:
+    ///   - count: The number of cards to fit
+    ///   - size: The size offered to us
+    ///   - aspectRatio: The aspect ratio of the card
+    /// - Returns: The ideal width of our card
+    func gridItemWidthThatFits(
+        count: Int,
+        size: CGSize, 
+        atAspectRatio aspectRatio: CGFloat
+    ) -> CGFloat {
+        let count = CGFloat(count)
+        var columnCount = 1.0
+        
+        repeat {
+            let width = size.width / columnCount
+            let height = width / aspectRatio
+            
+            let rowCount = (count / columnCount).rounded(.up)
+            if rowCount * height < size.height {
+                return width.rounded(.down)
+            }
+            
+            columnCount += 1
+        } while columnCount < count
+        
+        return min(size.width / count, size.height * aspectRatio).rounded(.down)
     }
     
     /// Renders a series of actions that can be performed by the player during the game
