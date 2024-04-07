@@ -39,10 +39,7 @@ struct EmojiMemoryGameView: View {
                 .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
                 .foregroundStyle(viewModel.theme.color)
             
-            Rectangle()
-                .frame(width: .infinity, height: 1)
-                .foregroundColor(Color("TextColor"))
-                .opacity(0.2)
+            Divider()
                 .padding(EdgeInsets(
                     top: 10,
                     leading: 0,
