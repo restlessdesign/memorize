@@ -28,29 +28,49 @@ struct EmojiMemoryGameView: View {
     
     /// Renders the name of the current game as well as the player’s current score
     var gameHeader: some View {
-        VStack(spacing: 0) {
-            Text("Memorize!")
-                .font(.title3)
-                .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
-                .foregroundStyle(Color("TextColor"))
+        let title = Text("Memorize!")
+            .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+            .foregroundStyle(Color("TextColor"))
+        
+        let theme = Text("\(viewModel.theme.name)")
+            .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+            .foregroundStyle(viewModel.theme.color)
+        
+        let divider = Divider()
+            .padding(EdgeInsets(
+                top: 10,
+                leading: 0,
+                bottom: 10,
+                trailing: 0
+            ))
+        
+        let score = Text("Score: \(viewModel.score)")
+            .font(.headline)
+            .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+        
+        return ViewThatFits {
+            VStack(spacing: 0) {
+                title.font(.title3)
+                theme.font(.title)
+                divider
+                score
+            }
             
-            Text("\(viewModel.theme.name)")
-                .font(.title)
-                .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
-                .foregroundStyle(viewModel.theme.color)
-            
-            Divider()
-                .padding(EdgeInsets(
-                    top: 10,
-                    leading: 0,
-                    bottom: 10,
-                    trailing: 0
-                ))
-            
-            Text("Score: \(viewModel.score)")
-                .font(.headline)
-                .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
-            
+            HStack(spacing: 0) {
+                HStack(spacing: 0) {
+                    title.font(.title3)
+                    Text(" • ")
+                    theme.font(.title3)
+                }
+                Spacer()
+                score
+            }
+            .padding(EdgeInsets(
+                top: 30,
+                leading: 0,
+                bottom: -5,
+                trailing: 0
+            ))
         }
     }
     
