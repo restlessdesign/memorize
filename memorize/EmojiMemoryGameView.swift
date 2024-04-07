@@ -47,6 +47,12 @@ struct EmojiMemoryGameView: View {
         let score = Text("Score: \(viewModel.score)")
             .font(.headline)
             .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+            .padding(4)
+            .background(
+                RoundedRectangle(cornerRadius: 4)
+                    .foregroundColor(.gray)
+                    .opacity(0.2)
+            )
         
         return ViewThatFits {
             VStack(spacing: 0) {
